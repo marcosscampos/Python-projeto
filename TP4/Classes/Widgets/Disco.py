@@ -16,6 +16,7 @@ surface_disco = pygame.surface.Surface((largura_tela, altura_tela))
 
 
 def mostrar_uso_disco():
+    surface_disco.fill(Cores.preto)
     largura = largura_tela - 2 * 20
     pygame.draw.rect(surface_disco, Cores.verde_claro, (20, 140, largura, 50))
     tela.blit(surface_disco, (0, 300))

@@ -26,6 +26,7 @@ def get_ip():
 
 
 def resumo_telas():
+    surface_resumo.fill(Cores.preto)
     ##CPU
     porcentagem = psutil.cpu_percent(interval=0)
     largura = largura_tela - 2 * 20

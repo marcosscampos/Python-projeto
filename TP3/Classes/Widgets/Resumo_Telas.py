@@ -11,7 +11,6 @@ font = pygame.font.SysFont('Segoe UI', 15)
 
 tela = pygame.display.set_mode((largura_tela, altura_tela))
 pygame.display.init()
-
 surface_resumo = pygame.surface.Surface((largura_tela, altura_tela))
 
 
@@ -27,6 +26,7 @@ def get_ip():
 
 def resumo_telas():
     ##CPU
+    surface_resumo.fill(Cores.preto)
     porcentagem = psutil.cpu_percent(interval=0)
     largura = largura_tela - 2 * 20
 

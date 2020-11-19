@@ -15,6 +15,7 @@ hosts = []
 
 
 def mostrar_info_ip_rede():
+    surface_rede.fill(Cores.preto)
     texto = 'Informações De Rede:'
     texto_font = font.render(texto, 1, Cores.cinza)
     surface_rede.blit(texto_font, (20, 20))

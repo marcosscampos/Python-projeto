@@ -18,6 +18,7 @@ surface_processos = pygame.Surface((largura_tela, altura_tela))
 
 
 def mostra_processos():
+    surface_processos.fill(Cores.preto)
     processos = psutil.pids()
     processo = []
     gap = 70

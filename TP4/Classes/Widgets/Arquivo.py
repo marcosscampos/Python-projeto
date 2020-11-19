@@ -17,6 +17,7 @@ surface_arquivo = pygame.surface.Surface((largura_tela, altura_tela))
 
 
 def mostra_arquivo():
+    surface_arquivo.fill(Cores.preto)
     arquivos = os.listdir()
     dic = {}
 
