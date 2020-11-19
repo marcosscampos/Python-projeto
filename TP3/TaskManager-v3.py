@@ -1,6 +1,5 @@
 import pygame
 from Classes.Widgets import CPU, Memoria, Disco, Redes, Resumo_Telas
-from Classes.Common import Cores
 
 pygame.display.set_caption("Gerenciador")
 tela = pygame.display.set_mode((600, 600))

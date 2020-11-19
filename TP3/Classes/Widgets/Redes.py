@@ -15,16 +15,26 @@ hosts = []
 
 
 def mostrar_info_ip_rede():
+    texto = 'Informações De Rede:'
+    texto_font = font.render(texto, 1, Cores.cinza)
+    surface_rede.blit(texto_font, (20, 20))
     hosts = mostrar_ips()
     aux = hosts
-    espacos = 100
+    gap = 60
+
     for host in aux:
         ip = str(host[1])
         if ip != '127.0.0.1':
-            texto = font.render(host[0] + ": " + host[1], 1, Cores.cinza)
+            texto = font.render(host[0] + ": " + host[1], True, Cores.cinza)
 
-            surface_rede.blit(texto, (15, espacos))
-            espacos += 25
+            surface_rede.blit(texto, (20, gap))
+            gap += 25
+
+    instrucao = font.render(
+        'Tecle ← ou → para navegar. Para ver o resumo, aperte a tecla ESPAÇO.',
+        True,
+        Cores.branco)
+    surface_rede.blit(instrucao, (65, 560))
     return surface_rede
 
 
