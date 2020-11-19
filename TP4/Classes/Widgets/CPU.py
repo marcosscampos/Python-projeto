@@ -4,11 +4,11 @@ import cpuinfo
 
 from Classes.Common import Cores
 
-largura_tela = 600
+largura_tela = 800
 altura_tela = 600
 
 pygame.font.init()
-font = pygame.font.SysFont('Verdana', 15)
+font = pygame.font.SysFont('Segoe UI', 15)
 
 tela = pygame.display.set_mode((largura_tela, altura_tela))
 pygame.display.init()
@@ -26,12 +26,18 @@ def mostra_uso_cpu():
     mostra_texto(surface_cpu, "Núcleos (físicos):", "nucleos", 90)
     tela.blit(surface_cpu, (20, 150))
 
+    instrucao = font.render(
+        'Tecle ← ou → para navegar. Para ver o resumo, aperte a tecla ESPAÇO.',
+        True,
+        Cores.branco)
+    surface_cpu.blit(instrucao, (150, 560))
+
     capacidade = psutil.cpu_percent(interval=1, percpu=True)
 
     qtd_cpu = len(capacidade)
     x = y = 10
     deslocamento = 15
-    altura = surface_cpu.get_height() - 150
+    altura = surface_cpu.get_height() - 200
     largura = (surface_cpu.get_width() - 2 * y - (qtd_cpu + 1) * deslocamento) / qtd_cpu
     d = x + deslocamento
     for i in capacidade:

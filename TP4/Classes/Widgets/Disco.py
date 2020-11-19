@@ -3,11 +3,11 @@ import pygame
 
 from Classes.Common import Cores
 
-largura_tela = 600
+largura_tela = 800
 altura_tela = 600
 
 pygame.font.init()
-font = pygame.font.SysFont('Verdana', 15)
+font = pygame.font.SysFont('Segoe UI', 15)
 
 tela = pygame.display.set_mode((largura_tela, altura_tela))
 pygame.display.init()
@@ -23,6 +23,12 @@ def mostrar_uso_disco():
     largura = largura * psutil.disk_usage('.').percent / 100
     pygame.draw.rect(surface_disco, Cores.verde, (20, 140, largura, 50))
     tela.blit(surface_disco, (0, 300))
+
+    instrucao = font.render(
+        'Tecle ← ou → para navegar. Para ver o resumo, aperte a tecla ESPAÇO.',
+        True,
+        Cores.branco)
+    surface_disco.blit(instrucao, (150, 560))
 
     mostrar_texto(surface_disco, 'Espaço total: ', 'total', 55)
     mostrar_texto(surface_disco, 'Espaço usado: ', 'used', 80)

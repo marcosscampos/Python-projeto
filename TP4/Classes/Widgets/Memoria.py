@@ -3,11 +3,11 @@ import pygame
 
 from Classes.Common import Cores
 
-largura_tela = 600
+largura_tela = 800
 altura_tela = 600
 
 pygame.font.init()
-font = pygame.font.SysFont('Verdana', 15)
+font = pygame.font.SysFont('Segoe UI', 15)
 
 tela = pygame.display.set_mode((largura_tela, altura_tela))
 pygame.display.init()
@@ -23,6 +23,12 @@ def mostra_uso_memoria():
     largura = largura * psutil.virtual_memory().percent / 100
     pygame.draw.rect(surface_memoria, Cores.roxo, (20, 140, largura, 50))
     tela.blit(surface_memoria, (0, 140))
+
+    instrucao = font.render(
+        'Tecle ← ou → para navegar. Para ver o resumo, aperte a tecla ESPAÇO.',
+        True,
+        Cores.branco)
+    surface_memoria.blit(instrucao, (150, 560))
 
     mostra_texto(surface_memoria, 'Memória Total: ', 'total', 55)
     mostra_texto(surface_memoria, 'Memória Em Uso: ', 'used', 80)
