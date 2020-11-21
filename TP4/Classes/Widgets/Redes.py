@@ -2,6 +2,7 @@ import psutil
 import pygame
 
 from Classes.Common import Cores
+from Classes.Model.Arquivo import Arquivo
 
 largura_tela = 800
 altura_tela = 600
