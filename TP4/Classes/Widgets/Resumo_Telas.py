@@ -1,7 +1,9 @@
 import psutil
 import pygame
+import socket
 
 from Classes.Common import Cores
+from Classes.Model.Arquivo import Arquivo
 
 largura_tela = 800
 altura_tela = 600
@@ -15,14 +17,15 @@ pygame.display.init()
 surface_resumo = pygame.surface.Surface((largura_tela, altura_tela))
 
 
-def mostrar_ips():
+def mostrar_ips(sistema):
     for interface, snics in psutil.net_if_addrs().items():
         for snic in snics:
-            yield interface, snic.address
+            if snic.family == sistema:
+                yield interface, snic.address
 
 
 def get_ip():
-    return list(mostrar_ips())
+    return list(mostrar_ips(socket.AF_INET))
 
 
 def resumo_telas():
@@ -75,13 +78,13 @@ def resumo_telas():
     ##Rede
     texto_rede = font.render("Informações de Rede:", True, Cores.cinza)
     surface_resumo.blit(texto_rede, (20, 290))
-    hosts = mostrar_ips()
+    hosts = get_ip()
     aux = hosts
     gap = 320
     for host in aux:
         ip = str(host[1])
-        if ip != '127.0.0.1':
-            texto = font.render(host[0] + ": " + host[1], 1, Cores.cinza)
+        if ip != '127.0.0.1' and ip[0:3] != '169':
+            texto = font.render(Arquivo.ajusta_nome_arquivo(host[0]) + " - " + host[1], True, Cores.cinza)
 
             surface_resumo.blit(texto, (20, gap))
             gap += 25

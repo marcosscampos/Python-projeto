@@ -14,7 +14,7 @@ class Arquivo:
             aux = '{:.10}'.format(nome)
         else:
             while palavra_tamanho != tamanho_minimo:
-                aux = aux + " "
+                aux += " "
                 palavra_tamanho = len(aux)
 
         return aux
