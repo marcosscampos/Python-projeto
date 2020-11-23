@@ -32,6 +32,10 @@ def mostrar_info_ip_rede():
     aux = hosts
     gap = 85
 
+    mostra_info_hosts_rede()
+    if len(hosts_detalhados) == 0:
+        t = threading.Thread(target=buscar_hosts())
+        t.start()
     nome = '{:>5}'.format('INTERFACE')
     ip = '{:>30}'.format('IP')
     mascara = '{:>45}'.format("MÁSCARA")
@@ -54,8 +58,6 @@ def mostrar_info_ip_rede():
         texto_atencao = fontBold.render('Verificando a rede, aguarde.', True, Cores.branco)
         surface_rede.blit(texto_atencao, (275, 270))
 
-    mostra_info_hosts_rede()
-
     instrucao = font.render(
         'Tecle ← ou → para navegar. Para ver o resumo, aperte a tecla ESPAÇO.',
         True,
@@ -66,11 +68,7 @@ def mostrar_info_ip_rede():
 
 def mostra_info_hosts_rede():
     gap = 250
-    if len(hosts_detalhados) == 0:
-        t = threading.Thread(target=buscar_hosts())
-        t.start()
-    else:
-        buscar_hosts()
+    buscar_hosts()
 
     porta = '{:>5}'.format('PORTA')
     estado = '{:>30}'.format('ESTADO')
