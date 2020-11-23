@@ -11,7 +11,6 @@ pygame.font.init()
 font = pygame.font.SysFont('Segoe UI', 15)
 fontBold = pygame.font.SysFont('Segoe UI', 15, True)
 
-tela = pygame.display.set_mode((largura_tela, altura_tela))
 pygame.display.init()
 
 surface_processos = pygame.Surface((largura_tela, altura_tela))

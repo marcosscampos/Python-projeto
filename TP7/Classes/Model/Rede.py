@@ -1,7 +1,6 @@
 class Rede:
-    def __init__(self, interface, ip, mascara):
+    def __init__(self, interface, ip, mascara, pacotes):
         self.interface = interface
         self.ip = ip
         self.mascara = mascara
-        # self.pacote_enviado = pacote_enviado
-        # self.pacote_recebido = pacote_recebido
+        self.pacotes = pacotes
