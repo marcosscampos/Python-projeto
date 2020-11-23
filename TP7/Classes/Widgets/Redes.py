@@ -133,7 +133,11 @@ def get_hosts_rede(ip_base):
 
 
 def buscar_hosts():
-    ips_validos = '192.168.1.'
+    ip = ''
+    for i in get_ip():
+        if i.ip != '127.0.0.1' and i.ip[0:3] != '169':
+            ip = i.ip
+    ips_validos = ip
     ip_principal = ips_validos
 
     ip_string = ip_principal
