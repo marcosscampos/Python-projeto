@@ -7,7 +7,7 @@ class Client:
     _instance = None
 
     def __init__(self):
-        self._port = 9999
+        self._port = 7777
         self._host = socket.gethostname()
 
     @staticmethod

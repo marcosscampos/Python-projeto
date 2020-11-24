@@ -2,8 +2,11 @@ import psutil
 import pygame
 
 from Classes.Common import Cores
-from Classes.Model import Processos, Arquivo
+from Classes.Model import Arquivo
+from Classes.Common.ClientSide import Client
 
+cliente = Client.instance()
+processos = cliente.use('process')
 largura_tela = 800
 altura_tela = 600
 
@@ -18,28 +21,8 @@ surface_processos = pygame.Surface((largura_tela, altura_tela))
 
 def mostra_processos():
     surface_processos.fill(Cores.preto)
-    processos = psutil.pids()
-    processo = []
-    processos.reverse()
     gap = 100
-    numero_processos = 0
-
-    for pid in processos:
-        try:
-            nome = psutil.Process(pid).name()
-            tamanho_nome = len(nome)
-            if pid != 1 and tamanho_nome <= 10:
-                percent_uso = str(format(psutil.Process(pid).memory_percent(), '.2f')) + '%'
-                memoria_usada = psutil.Process(pid).memory_info().rss / 1024 / 1024
-
-                aux = Processos.Processos(pid, nome, percent_uso, memoria_usada)
-                processo.append(aux)
-                numero_processos += 1
-        except:
-            print(f"Erro ao obter informações do processo: {pid}")
-
-        if numero_processos == 15:
-            break
+    processo = processos
 
     titulo_processos = 'Informações dos processos:'
     texto_tiulo = fontBold.render(titulo_processos, True, Cores.cinza)

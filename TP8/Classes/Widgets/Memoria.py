@@ -2,6 +2,7 @@ import psutil
 import pygame
 
 from Classes.Common import Cores
+from Classes.Common.ClientSide import Client
 
 largura_tela = 800
 altura_tela = 600
@@ -41,15 +42,15 @@ def mostra_uso_memoria():
 def mostra_texto(superficie, nome, chave, pos_y):
     text = font.render(nome, True, Cores.branco)
     superficie.blit(text, (20, pos_y))
+    cliente = Client.instance()
+    memoria = cliente.use('memory')
 
-    if chave == 'total':
-        s = f"{str(round(psutil.virtual_memory().total / (1024 * 1024 * 1024), 2))}GB"
-    elif chave == 'used':
-        s = f"{str(round(psutil.virtual_memory().used / (1024 * 1024 * 1024), 2))}GB " \
-            f"- {str(psutil.virtual_memory().percent)}%"
-    elif chave == 'free':
-        s = f"{str(round(psutil.virtual_memory().free / (1024 * 1024 * 1024), 2))}GB"
-    else:
-        s = psutil.virtual_memory().chave
+    for memo in memoria:
+        if chave == 'total':
+            s = f"{str(memo.total)}GB"
+        elif chave == 'used':
+            s = f"{str(memo.used)}GB - {memo.percent}%"
+        elif chave == 'free':
+            s = f"{str(memo.free)}GB"
     text = font.render(s, True, Cores.cinza)
     superficie.blit(text, (160, pos_y))

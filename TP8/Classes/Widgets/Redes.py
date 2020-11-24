@@ -8,8 +8,11 @@ import os
 import threading
 
 from Classes.Common import Cores
-from Classes.Model import Rede, Arquivo, Hosts, Portas
+from Classes.Model import Arquivo, Hosts, Portas
+from Classes.Common.ClientSide import Client
 
+client = Client.instance()
+network = client.use('network')
 largura_tela = 800
 altura_tela = 600
 pygame.font.init()
@@ -20,7 +23,7 @@ pygame.display.init()
 surface_rede = pygame.surface.Surface((largura_tela, altura_tela))
 hosts = []
 hosts_detalhados = []
-trafego = []
+hosts_validos = []
 
 
 def mostrar_info_ip_rede():
@@ -28,14 +31,15 @@ def mostrar_info_ip_rede():
     texto = 'Informações De Rede:'
     texto_font = font.render(texto, True, Cores.cinza)
     surface_rede.blit(texto_font, (20, 20))
-    hosts = get_ip()
-    aux = hosts
+
+    aux = network
     gap = 85
 
     mostra_info_hosts_rede()
     if len(hosts_detalhados) == 0:
         t = threading.Thread(target=buscar_hosts())
         t.start()
+        t.join()
 
     nome = '{:>5}'.format('INTERFACE')
     ip = '{:>30}'.format('IP')
@@ -48,7 +52,8 @@ def mostrar_info_ip_rede():
 
     for host in aux:
         ip = str(host.ip)
-        if ip != '127.0.0.1' and ip[0:3] != '169' and host.pacotes[1][0] != '0' and host.pacotes[1][1] != 0:
+        if ip != '127.0.0.1' and ip[0:3] != '169' and ip[0:3] != '172'\
+                and host.pacotes[1][0] != '0' and host.pacotes[1][1] != 0:
             texto_interface = '{:>0}'.format(Arquivo.Arquivo.ajusta_nome_arquivo(host.interface))
             texto_ip = '{:>38}'.format(host.ip)
             texto_mascara = '{:>40}'.format(str(host.mascara))
@@ -58,10 +63,6 @@ def mostrar_info_ip_rede():
             texto_tela = font.render(texto_compilado, True, Cores.cinza)
             surface_rede.blit(texto_tela, (20, gap))
             gap += 25
-
-    if len(hosts_detalhados) == 0:
-        texto_atencao = fontBold.render('Escaneando a rede, aguarde...', True, Cores.branco)
-        surface_rede.blit(texto_atencao, (275, 270))
 
     instrucao = font.render(
         'Tecle ← ou → para navegar. Para ver o resumo, aperte a tecla ESPAÇO.',
@@ -73,7 +74,7 @@ def mostrar_info_ip_rede():
 
 
 def mostra_info_hosts_rede():
-    gap = 250
+    gap = 170
 
     for host_rede in hosts_detalhados:
 
@@ -85,29 +86,17 @@ def mostra_info_hosts_rede():
         gap += 15
 
         for porta in host_rede.portas:
-            texto_porta_estado = f'Porta: {str(porta.portas)} - Estado: {porta.estado}'
-            textos = font.render(texto_porta_estado, True, Cores.cinza)
-            surface_rede.blit(textos, (20, gap))
-            gap += 20
+            if porta.portas != "" and porta.estado != "":
+                texto_porta_estado = f'Porta: {str(porta.portas)} - Estado: {porta.estado}'
+                textos = font.render(texto_porta_estado, True, Cores.cinza)
+                surface_rede.blit(textos, (20, gap))
+                gap += 20
         gap += 15
-
-
-def mostrar_ips(sistema):
-    for pacotes in psutil.net_io_counters(pernic=True).items():
-        for interface, snics in psutil.net_if_addrs().items():
-            for snic in snics:
-                if snic.family == sistema:
-                    rede = Rede.Rede(interface, snic.address, snic.netmask, pacotes)
-                    yield rede
-
-
-def get_ip():
-    return list(mostrar_ips(socket.AF_INET))
 
 
 def retorna_codigo_ping(hostname):
     plataforma = platform.system()
-    args = []
+
     if plataforma == "Windows":
         args = ["ping", "-n", "1", "-l", "1", "-w", "100", hostname]
 
@@ -118,24 +107,35 @@ def retorna_codigo_ping(hostname):
     return ret_cod
 
 
-def get_hosts_rede(ip_base):
-    hosts_validos = []
+def get_hosts_rede(base_ip):
     return_codes = dict()
+    threads = []
     for i in range(1, 255):
+        t = threading.Thread(target=get_hosts_validos, args=(return_codes, base_ip, i))
+        threads.append(t)
 
-        return_codes[ip_base + '{0}'.format(i)] = retorna_codigo_ping(ip_base + '{0}'.format(i))
-        if i % 20 == 0:
-            print(".", end="")
+    for i in threads:
+        i.start()
 
-        if return_codes[ip_base + '{0}'.format(i)] == 0:
-            hosts_validos.append(ip_base + '{0}'.format(i))
-
+    for i in threads:
+        i.join()
+    print(f"\nOs host válidos são: {hosts_validos}")
+    print('\nMapeando portas...')
     return hosts_validos
+
+
+def get_hosts_validos(return_codes, ip_base, i):
+    return_codes[ip_base + '{0}'.format(i)] = retorna_codigo_ping(ip_base + '{0}'.format(i))
+    if i % 20 == 0:
+        print(".", end="")
+    if return_codes[ip_base + '{0}'.format(i)] == 0:
+        hosts_validos.append(ip_base + '{0}'.format(i))
 
 
 def buscar_hosts():
     ip = ''
-    for i in get_ip():
+
+    for i in network:
         if i.ip != '127.0.0.1' and i.ip[0:3] != '169':
             ip = i.ip
     ips_validos = ip

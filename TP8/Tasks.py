@@ -1,9 +1,7 @@
 import pygame
 from Classes.Widgets import CPU, Memoria, Disco, Redes, Resumo_Telas, Arquivo, Processos
-from Classes.Common.ClientSide import Client
 
-client = Client.instance()
-arch = client.use('archive')
+
 pygame.display.set_caption("Gerenciador")
 tela = pygame.display.set_mode((800, 600))
 relogio = pygame.time.Clock()

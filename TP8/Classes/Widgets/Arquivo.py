@@ -6,10 +6,6 @@ import threading
 
 from Classes.Common import Cores
 from Classes.Model.Arquivo import Arquivo
-from Classes.Common.ClientSide import Client
-
-client = Client.instance()
-client.use('archive')
 largura_tela = 800
 altura_tela = 600
 
