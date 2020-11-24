@@ -45,12 +45,11 @@ def mostra_texto(superficie, nome, chave, pos_y):
     cliente = Client.instance()
     memoria = cliente.use('memory')
 
-    for memo in memoria:
-        if chave == 'total':
-            s = f"{str(memo.total)}GB"
-        elif chave == 'used':
-            s = f"{str(memo.used)}GB - {memo.percent}%"
-        elif chave == 'free':
-            s = f"{str(memo.free)}GB"
+    if chave == 'total':
+        s = f"{str(memoria.total)}GB"
+    elif chave == 'used':
+        s = f"{str(memoria.used)}GB - {memoria.percent}%"
+    elif chave == 'free':
+        s = f"{str(memoria.free)}GB"
     text = font.render(s, True, Cores.cinza)
     superficie.blit(text, (160, pos_y))

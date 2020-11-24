@@ -1,9 +1,13 @@
 import psutil
 import pygame
-import socket
 
 from Classes.Common import Cores
+from Classes.Common.ClientSide import Client
 from Classes.Model.Arquivo import Arquivo
+
+client = Client.instance()
+network = client.use('network')
+memoria = client.use('memory')
 
 largura_tela = 800
 altura_tela = 600
@@ -15,17 +19,6 @@ tela = pygame.display.set_mode((largura_tela, altura_tela))
 pygame.display.init()
 
 surface_resumo = pygame.surface.Surface((largura_tela, altura_tela))
-
-
-def mostrar_ips(sistema):
-    for interface, snics in psutil.net_if_addrs().items():
-        for snic in snics:
-            if snic.family == sistema:
-                yield interface, snic.address
-
-
-def get_ip():
-    return list(mostrar_ips(socket.AF_INET))
 
 
 def resumo_telas():
@@ -69,22 +62,23 @@ def resumo_telas():
     pygame.draw.rect(surface_resumo, Cores.roxo, (20, 225, largura, 50))
     tela.blit(surface_resumo, (0, 140))
 
-    texto_barra = f"Uso de memória (Total: {str(round(psutil.virtual_memory().total / (1024 * 1024 * 1024), 2))}GB" \
-                  f" - {str(psutil.virtual_memory().percent)}%" \
-                  f" - {str(round(psutil.virtual_memory().used / (1024 * 1024 * 1024), 2))}GB):"
+    texto_barra = f"Uso de memória (Total: {str(memoria.total)}GB" \
+                  f" - {str(memoria.percent)}%" \
+                  f" - {str(memoria.used)}GB):"
     text = font.render(texto_barra, 1, Cores.branco)
     surface_resumo.blit(text, (20, 195))
 
     ##Rede
     texto_rede = font.render("Informações de Rede:", True, Cores.cinza)
     surface_resumo.blit(texto_rede, (20, 290))
-    hosts = get_ip()
+    hosts = network
     aux = hosts
     gap = 320
     for host in aux:
-        ip = str(host[1])
-        if ip != '127.0.0.1' and ip[0:3] != '169':
-            texto = font.render(Arquivo.ajusta_nome_arquivo(host[0]) + " - " + host[1], True, Cores.cinza)
+        ip = str(host.ip)
+        if ip != '127.0.0.1' and ip[0:3] != '169' and ip[0:3] != '172' \
+                and host.pacotes[1][0] != '0' and host.pacotes[1][1] != 0:
+            texto = font.render(Arquivo.ajusta_nome_arquivo(host.interface) + " - " + host.ip, True, Cores.cinza)
 
             surface_resumo.blit(texto, (20, gap))
             gap += 25

@@ -1,6 +1,4 @@
-import psutil
 import pygame
-import socket
 import platform
 import subprocess
 import nmap
