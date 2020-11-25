@@ -29,7 +29,7 @@ def socket_server():
         print(f'Conectado na porta: {str(addr)}')
 
         event_name = client.recv(1024)
-        name = str(event_name.decode('utf-8'))
+        name = str(event_name.decode('utf-8', 'ignore'))
 
         if name in eventos.keys():
             data = eventos[name]()
