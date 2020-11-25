@@ -43,7 +43,7 @@ def mostrar_info_ip_rede():
     ip = '{:>30}'.format('IP')
     mascara = '{:>43}'.format("MÁSCARA")
     pacote_enviado = '{:>28}'.format('PCT. ENVIADO')
-    pacote_recebido = '{:>30}'.format('PCT. RECEBIDO')
+    pacote_recebido = '{:>28}'.format('PCT. RECEBIDO')
     titulo_rede = nome + ip + mascara + pacote_enviado + pacote_recebido
     fonte_titulo_rede = fontBold.render(titulo_rede, True, Cores.cinza)
     surface_rede.blit(fonte_titulo_rede, (20, 65))
@@ -55,8 +55,8 @@ def mostrar_info_ip_rede():
             texto_interface = '{:>0}'.format(Arquivo.Arquivo.ajusta_nome_arquivo(host.interface))
             texto_ip = '{:>38}'.format(host.ip)
             texto_mascara = '{:>40}'.format(str(host.mascara))
-            texto_pacote_enviado = '{:>25}'.format(host.pacotes[1][0]) + 'MB'  # Enviado
-            texto_pacote_recebido = '{:>30}'.format(host.pacotes[1][1]) + 'MB'  # Recebido
+            texto_pacote_enviado = '{:>25}'.format(str(round(host.pacotes[1][0] / (1024 ** 2), 2))) + 'MB'  # Enviado
+            texto_pacote_recebido = '{:>30}'.format(str(round(host.pacotes[1][1] / (1024 ** 2), 2))) + 'MB'  # Recebido
             texto_compilado = texto_interface + texto_ip + texto_mascara + texto_pacote_enviado + texto_pacote_recebido
             texto_tela = font.render(texto_compilado, True, Cores.cinza)
             surface_rede.blit(texto_tela, (20, gap))
@@ -165,7 +165,10 @@ def detalhes_hosts(host_validos):
                 for port in lport:
                     porta = Portas.Portas(port, nm[host][proto][port]['state'])
                     ip.portas.append(porta)
-        except:
-            pass
+        except Exception as ex:
+            print(ex, 'Não foi possível escanear as portas.')
 
+        if len(ip.portas) > 0:
+            for porta in ip.portas:
+                print(f"Mapeado! Porta: [{str(porta.portas)} - {str(porta.estado)}]")
         hosts_detalhados.append(ip)
