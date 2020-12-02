@@ -8,6 +8,7 @@ from Classes.Model.Arquivo import Arquivo
 client = Client.instance()
 network = client.use('network')
 memoria = client.use('memory')
+disco = client.use('disk')
 
 largura_tela = 800
 altura_tela = 600
@@ -42,13 +43,13 @@ def resumo_telas():
     pygame.draw.rect(surface_resumo, Cores.verde_claro, (20, 130, largura, 50))
     tela.blit(surface_resumo, (0, 300))
 
-    largura = largura * psutil.disk_usage('.').percent / 100
+    largura = largura * disco.percent / 100
     pygame.draw.rect(surface_resumo, Cores.verde, (20, 130, largura, 50))
     tela.blit(surface_resumo, (0, 300))
 
-    texto_barra = f"Uso de disco: (Total: {str(round(psutil.disk_usage('.').total / (1024 * 1024 * 1024), 2))}GB" \
-                  f" - {str(psutil.disk_usage('.').percent)}% " \
-                  f"- {str(round(psutil.disk_usage('.').used / (1024 * 1024 * 1024), 2))}GB)"
+    texto_barra = f"Uso de disco: (Total: {str(disco.total)}GB" \
+                  f" - {str(disco.percent)}% " \
+                  f"- {str(disco.free)}GB)"
     text = font.render(texto_barra, 1, Cores.branco)
     surface_resumo.blit(text, (20, 100))
 
@@ -58,7 +59,7 @@ def resumo_telas():
     pygame.draw.rect(surface_resumo, Cores.roxo_claro, (20, 225, largura, 50))
     tela.blit(surface_resumo, (0, 140))
 
-    largura = largura * psutil.virtual_memory().percent / 100
+    largura = largura * memoria.percent / 100
     pygame.draw.rect(surface_resumo, Cores.roxo, (20, 225, largura, 50))
     tela.blit(surface_resumo, (0, 140))
 

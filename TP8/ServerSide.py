@@ -1,14 +1,22 @@
 import pickle
 import socket
+import logging as logger
+from multiprocessing import Process
 
 from Classes.functions.Rede import get_ip
+from Classes.functions.Rede import hosts_detalhados
 from Classes.functions.Processos import set_processos
 from Classes.functions.Memoria import set_memoria
+from Classes.functions.Disco import get_disk
+
+logger.basicConfig(level=logger.INFO)
 
 eventos = {
     'network': get_ip,
     'process': set_processos,
-    'memory': set_memoria
+    'memory': set_memoria,
+    'disk': get_disk,
+    'hosts': hosts_detalhados
 }
 
 
@@ -22,11 +30,11 @@ def socket_server():
 
     server.listen()
 
-    print(f'Servidor {host} esperando conexão na porta: {port}')
+    logger.info(f'\tServidor {host} esperando conexão na porta: {port}')
 
     while True:
         (client, addr) = server.accept()
-        print(f'Conectado na porta: {str(addr)}')
+        logger.info(f'\tConectado na porta: {str(addr)}')
 
         event_name = client.recv(1024)
         name = str(event_name.decode('utf-8', 'ignore'))
@@ -40,4 +48,9 @@ def socket_server():
 
 
 if __name__ == '__main__':
-    socket_server()
+    logger.info(f'\tIniciando as Tarefas')
+    try:
+        socket_server()
+    except Exception as ex:
+        logger.error("\tNão foi possível iniciar o servidor.", ex)
+    logger.info(f'\tTarefas finalizadas')

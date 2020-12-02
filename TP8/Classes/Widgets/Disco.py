@@ -2,6 +2,7 @@ import psutil
 import pygame
 
 from Classes.Common import Cores
+from Classes.Common.ClientSide import Client
 
 largura_tela = 800
 altura_tela = 600
@@ -40,20 +41,18 @@ def mostrar_uso_disco():
 
 
 def mostrar_texto(superficie, nome, chave, pos_y):
-    total = round(psutil.disk_usage('.').total / (1024 * 1024 * 1024), 2)
-    used = round(psutil.disk_usage('.').used / (1024 * 1024 * 1024), 2)
-    free = round(psutil.disk_usage('.').free / (1024 * 1024 * 1024), 2)
-    percent = psutil.disk_usage('.').percent
     text = font.render(nome, True, Cores.branco)
     superficie.blit(text, (20, pos_y))
+    cliente = Client.instance()
+    disco = cliente.use('disk')
 
     if chave == 'total':
-        s = f"{str(total)}GB"
+        s = f"{str(disco.total)}GB"
     elif chave == 'used':
-        s = f"{str(used)}GB - {str(percent)}%"
+        s = f"{str(disco.used)}GB - {str(disco.percent)}%"
     elif chave == 'free':
-        s = f"{str(free)}GB"
+        s = f"{str(disco.free)}GB"
     else:
-        s = psutil.disk_usage('.').chave
+        s = f"N/I"
     text = font.render(s, True, Cores.cinza)
     superficie.blit(text, (160, pos_y))
