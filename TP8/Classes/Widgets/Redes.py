@@ -75,9 +75,10 @@ def mostrar_info_ip_rede():
 
 
 def mostra_info_hosts_rede():
+    hosts_detalhados = hosts
     gap = 170
 
-    for host_rede in hosts:
+    for host_rede in hosts_detalhados:
 
         if host_rede.nome == "":
             host_rede.nome = "Nome não identificado."

@@ -4,7 +4,7 @@ import logging as logger
 from multiprocessing import Process
 
 from Classes.functions.Rede import get_ip
-from Classes.functions.Rede import hosts_detalhados
+from Classes.functions.Rede import buscar_hosts
 from Classes.functions.Processos import set_processos
 from Classes.functions.Memoria import set_memoria
 from Classes.functions.Disco import get_disk
@@ -16,7 +16,7 @@ eventos = {
     'process': set_processos,
     'memory': set_memoria,
     'disk': get_disk,
-    'hosts': hosts_detalhados
+    'hosts': buscar_hosts
 }
 
 

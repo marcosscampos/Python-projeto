@@ -84,6 +84,8 @@ def buscar_hosts():
     hosts_localizados = get_hosts_rede(base_ip)
     detalhes_hosts(hosts_localizados)
 
+    return hosts_detalhados
+
 
 def detalhes_hosts(host_validos):
     nm = nmap.nmap.PortScanner()
