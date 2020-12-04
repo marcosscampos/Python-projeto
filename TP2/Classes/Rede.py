@@ -22,15 +22,15 @@ def mostrar_info_ip_rede():
 
 def ethernet_ou_wifi():
     ip_info = psutil.net_if_addrs()
-    ip = "Não conectado."
-
-    if ip_info['Ethernet'][1].address[0:3] == '169':
-        ip = ip_info['Wi-Fi'][1].address
-    elif ip_info['Wi-Fi'][1].address[0:3] == '169':
-        ip = ip_info['Ethernet'][1].address
-    else:
-        texto = "Não conectado."
-        text = font.render(texto, 1, Cores.branco)
-        tela.blit(text, (20, 430))
+    ip = ip_info['Ethernet'][1].address
+    #
+    # if ip_info['Ethernet'][1].address[0:3] == '169':
+    #     ip = ip_info['Wi-Fi'][1].address
+    # elif ip_info['Wi-Fi'][1].address[0:3] == '169':
+    #     ip = ip_info['Ethernet'][1].address
+    # else:
+    #     texto = "Não conectado."
+    #     text = font.render(texto, 1, Cores.branco)
+    #     tela.blit(text, (20, 430))
 
     return ip
