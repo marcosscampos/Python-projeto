@@ -95,7 +95,11 @@ def detalhes_hosts(host_validos):
 
             ip = Hosts(host, nm[host].hostname())
 
-            print(nm[host].hostname())
+            if nm[host].hostname() != '':
+                print(f'Nome: {nm[host].hostname()}')
+            else:
+                print('Nome não identificado.')
+
             for proto in nm[host].all_protocols():
 
                 lport = nm[host][proto].keys()
@@ -103,10 +107,12 @@ def detalhes_hosts(host_validos):
                 for port in lport:
                     porta = Portas(port, nm[host][proto][port]['state'])
                     ip.portas.append(porta)
+
+            if len(ip.portas) > 0:
+                for porta in ip.portas:
+                    print(f"Mapeado! Porta: [{str(porta.portas)} - {str(porta.estado)}]")
+            hosts_detalhados.append(ip)
+
         except Exception as ex:
             print(ex, 'Não foi possível escanear as portas.')
 
-        if len(ip.portas) > 0:
-            for porta in ip.portas:
-                print(f"Mapeado! Porta: [{str(porta.portas)} - {str(porta.estado)}]")
-        hosts_detalhados.append(ip)

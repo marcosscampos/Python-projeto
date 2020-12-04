@@ -1,6 +1,10 @@
 import pickle
 import socket
 import sys
+from time import sleep
+import logging as logger
+
+logger.basicConfig(level=logger.INFO)
 
 
 class Client:
@@ -24,8 +28,9 @@ class Client:
             client.send(event.encode('utf-8'))
             data = client.recv(100000)
             client.close()
-        except Exception as ex:
-            print(str(ex))
-            sys.exit(1)
+        except:
+            logger.info('\tAguardando a conexão com o servidor...')
+            sleep(5)
+            return self.use(event)
 
         return pickle.loads(data)

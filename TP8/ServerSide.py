@@ -1,7 +1,6 @@
 import pickle
 import socket
 import logging as logger
-from multiprocessing import Process
 
 from Classes.functions.Rede import get_ip
 from Classes.functions.Rede import buscar_hosts

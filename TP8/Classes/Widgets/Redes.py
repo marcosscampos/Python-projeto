@@ -21,7 +21,6 @@ fontBold = pygame.font.SysFont('Segoe UI', 15, True)
 pygame.display.init()
 
 surface_rede = pygame.surface.Surface((largura_tela, altura_tela))
-# hosts_validos = []
 
 
 def mostrar_info_ip_rede():
@@ -34,13 +33,6 @@ def mostrar_info_ip_rede():
     gap = 85
 
     mostra_info_hosts_rede()
-    # t = threading.Thread(target=hosts)
-    # t.start()
-    # t.join()
-    # if len(hosts) == 0:
-    #     t = threading.Thread(target=hosts)
-    #     t.start()
-    #     t.join()
 
     nome = '{:>5}'.format('INTERFACE')
     ip = '{:>30}'.format('IP')
@@ -76,7 +68,7 @@ def mostrar_info_ip_rede():
 
 def mostra_info_hosts_rede():
     hosts_detalhados = hosts
-    gap = 170
+    gap = 185
 
     for host_rede in hosts_detalhados:
 
@@ -94,85 +86,3 @@ def mostra_info_hosts_rede():
                 surface_rede.blit(textos, (20, gap))
                 gap += 20
         gap += 15
-
-#
-# def retorna_codigo_ping(hostname):
-#     plataforma = platform.system()
-#
-#     if plataforma == "Windows":
-#         args = ["ping", "-n", "1", "-l", "1", "-w", "100", hostname]
-#
-#     else:
-#         args = ['ping', '-c', '1', '-W', '1', hostname]
-#
-#     ret_cod = subprocess.call(args, stdout=open(os.devnull, 'w'), stderr=open(os.devnull, 'w'))
-#     return ret_cod
-#
-#
-# def get_hosts_rede(base_ip):
-#     return_codes = dict()
-#     threads = []
-#     for i in range(1, 255):
-#         t = threading.Thread(target=get_hosts_validos, args=(return_codes, base_ip, i))
-#         threads.append(t)
-#
-#     for i in threads:
-#         i.start()
-#
-#     for i in threads:
-#         i.join()
-#     print(f"\nOs host válidos são: {hosts_validos}")
-#     print('\nMapeando portas...')
-#     return hosts_validos
-#
-#
-# def get_hosts_validos(return_codes, ip_base, i):
-#     return_codes[ip_base + '{0}'.format(i)] = retorna_codigo_ping(ip_base + '{0}'.format(i))
-#     if i % 20 == 0:
-#         print(".", end="")
-#     if return_codes[ip_base + '{0}'.format(i)] == 0:
-#         hosts_validos.append(ip_base + '{0}'.format(i))
-#
-#
-# def buscar_hosts():
-#     ip = ''
-#
-#     for i in network:
-#         if i.ip != '127.0.0.1' and i.ip[0:3] != '169':
-#             ip = i.ip
-#     ips_validos = ip
-#     ip_principal = ips_validos
-#
-#     ip_string = ip_principal
-#
-#     ip_lista = ip_string.split('.')
-#     base_ip = ".".join(ip_lista[0:3]) + '.'
-#     print("O teste sera feito com a base: ", base_ip)
-#
-#     hosts_localizados = get_hosts_rede(base_ip)
-#     detalhes_hosts(hosts_localizados)
-#
-#
-# def detalhes_hosts(host_validos):
-#     nm = nmap.nmap.PortScanner()
-#     for host in host_validos:
-#         try:
-#             nm.scan(host)
-#
-#             ip = Hosts.Hosts(host, nm[host].hostname())
-#
-#             print(nm[host].hostname())
-#             for proto in nm[host].all_protocols():
-#
-#                 lport = nm[host][proto].keys()
-#
-#                 for port in lport:
-#                     porta = Portas.Portas(port, nm[host][proto][port]['state'])
-#                     ip.portas.append(porta)
-#         except Exception as ex:
-#             print(ex, 'Não foi possível escanear as portas.')
-#
-#         if len(ip.portas) > 0:
-#             for porta in ip.portas:
-#                 print(f"Mapeado! Porta: [{str(porta.portas)} - {str(porta.estado)}]")
-#         hosts_detalhados.append(ip)
