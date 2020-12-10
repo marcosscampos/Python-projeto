@@ -4,19 +4,34 @@ import logging as logger
 
 from Classes.functions.Rede import get_ip
 from Classes.functions.Rede import buscar_hosts
+from Classes.functions.Rede import hosts_detalhados
 from Classes.functions.Processos import set_processos
 from Classes.functions.Memoria import set_memoria
 from Classes.functions.Disco import get_disk
+from Classes.Model.TheadRede import ThreadRede
 
 logger.basicConfig(level=logger.INFO)
 
 eventos = {
-    'network': get_ip,
-    'process': set_processos,
-    'memory': set_memoria,
-    'disk': get_disk,
-    'hosts': buscar_hosts
+    'network': get_ip(),
+    'process': set_processos(),
+    'memory': set_memoria(),
+    'disk': get_disk(),
+    'hosts': buscar_hosts(),
+    'detailed_hosts': hosts_detalhados
 }
+
+threads = []
+
+for i in range(len(eventos)):
+    for evento in eventos.keys():
+        if evento == 'hosts' and len(hosts_detalhados) == 0:
+            thread = ThreadRede(1, 'Thread-Rede', i)
+            thread.start()
+            threads.append(thread)
+
+for i in threads:
+    i.join()
 
 
 def socket_server():
@@ -39,7 +54,7 @@ def socket_server():
         name = str(event_name.decode('utf-8', 'ignore'))
 
         if name in eventos.keys():
-            data = eventos[name]()
+            data = eventos[name]
             client.send(pickle.dumps(data))
 
         if name in eventos.keys() != 'memory':

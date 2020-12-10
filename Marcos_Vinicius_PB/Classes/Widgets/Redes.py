@@ -1,17 +1,11 @@
 import pygame
-import platform
-import subprocess
-import nmap
-import os
-import threading
 
 from Classes.Common import Cores
-from Classes.Model import Arquivo, Hosts, Portas
+from Classes.Model import Arquivo
 from Classes.Common.ClientSide import Client
 
 client = Client.instance()
 network = client.use('network')
-hosts = client.use('hosts')
 
 largura_tela = 800
 altura_tela = 600
@@ -67,7 +61,8 @@ def mostrar_info_ip_rede():
 
 
 def mostra_info_hosts_rede():
-    hosts_detalhados = hosts
+    detailed_hosts = client.use('detailed_hosts')
+    hosts_detalhados = detailed_hosts
     gap = 185
 
     for host_rede in hosts_detalhados:
